@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/ymiseddy/golang_learn/idhash"
+	"github.com/ymiseddy/go_tools/idhash"
 )
 
 var samplePassword = "chavez"
