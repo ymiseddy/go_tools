@@ -1,4 +1,4 @@
-module github.com/ymiseddy/golang_learn/idhash
+module github.com/ymiseddy/go_tools/idhash
 
 go 1.23.1
 
