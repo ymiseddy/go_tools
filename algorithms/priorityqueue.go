@@ -5,23 +5,25 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
-type PriorityQueueNode[T comparable, K constraints.Ordered] struct {
+type priorityQueueNode[T comparable, K constraints.Ordered] struct {
 	priority K
 	data     T
 }
 
 type PriorityQueue[T comparable, K constraints.Ordered] struct {
-	data []*PriorityQueueNode[T, K]
+	data []*priorityQueueNode[T, K]
 }
 
+// Create a new priority queue.
 func NewPriorityQueue[T comparable, K constraints.Ordered](capacity int) PriorityQueue[T, K] {
 	return PriorityQueue[T, K]{
-		data: make([]*PriorityQueueNode[T, K], 0, capacity),
+		data: make([]*priorityQueueNode[T, K], 0, capacity),
 	}
 }
 
+// Push a new item onto the priority queue
 func (q *PriorityQueue[T, K]) Push(value T, priority K) {
-	node := PriorityQueueNode[T, K]{
+	node := priorityQueueNode[T, K]{
 		priority: priority,
 		data:     value,
 	}
@@ -29,10 +31,12 @@ func (q *PriorityQueue[T, K]) Push(value T, priority K) {
 	q.heapifyUp(len(q.data) - 1)
 }
 
+// Get the current size of the priority queue
 func (q *PriorityQueue[T, K]) Size() int {
 	return len(q.data)
 }
 
+// Retrieve the next item without popping it
 func (q *PriorityQueue[T, K]) Peek() (*T, error) {
 	if len(q.data) == 0 {
 		return nil, errors.New("No items are in the queue.")
@@ -40,6 +44,7 @@ func (q *PriorityQueue[T, K]) Peek() (*T, error) {
 	return &q.data[0].data, nil
 }
 
+// Pop the next item
 func (q *PriorityQueue[T, K]) Pop() (*T, error) {
 	if len(q.data) == 0 {
 		return nil, errors.New("Queue is empty")
@@ -94,7 +99,7 @@ func (q *PriorityQueue[T, K]) heapifyDown(index int) {
 		}
 	}
 
-	var rightNode *PriorityQueueNode[T, K] = nil
+	var rightNode *priorityQueueNode[T, K] = nil
 	if rightChildIndex < len(q.data) {
 		rightNode = q.data[rightChildIndex]
 	}

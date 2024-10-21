@@ -1,28 +1,28 @@
 package algorithms
 
-// LRUCacheNode represents each entry in the doubly linked list.
-type LRUCacheNode[K comparable, V any] struct {
+// lruCacheNode represents each entry in the doubly linked list.
+type lruCacheNode[K comparable, V any] struct {
 	key   K
 	value V
-	prev  *LRUCacheNode[K, V]
-	next  *LRUCacheNode[K, V]
+	prev  *lruCacheNode[K, V]
+	next  *lruCacheNode[K, V]
 }
 
 // LRUCache represents the cache structure.
 type LRUCache[K comparable, V any] struct {
 	capacity int
-	cache    map[K]*LRUCacheNode[K, V]
-	head     *LRUCacheNode[K, V]
-	tail     *LRUCacheNode[K, V]
+	cache    map[K]*lruCacheNode[K, V]
+	head     *lruCacheNode[K, V]
+	tail     *lruCacheNode[K, V]
 }
 
 // NewLRUCache initializes a new LRUCache with a given capacity.
 func NewLRUCache[K comparable, V any](capacity int) *LRUCache[K, V] {
 	lru := &LRUCache[K, V]{
 		capacity: capacity,
-		cache:    make(map[K]*LRUCacheNode[K, V]),
-		head:     &LRUCacheNode[K, V]{},
-		tail:     &LRUCacheNode[K, V]{},
+		cache:    make(map[K]*lruCacheNode[K, V]),
+		head:     &lruCacheNode[K, V]{},
+		tail:     &lruCacheNode[K, V]{},
 	}
 	lru.head.next = lru.tail
 	lru.tail.prev = lru.head
@@ -46,7 +46,7 @@ func (this *LRUCache[K, V]) Put(key K, value V) {
 		node.value = value
 		this.moveToHead(node)
 	} else {
-		node := &LRUCacheNode[K, V]{
+		node := &lruCacheNode[K, V]{
 			key:   key,
 			value: value,
 		}
@@ -60,7 +60,7 @@ func (this *LRUCache[K, V]) Put(key K, value V) {
 }
 
 // addNode adds a new node right after the head.
-func (this *LRUCache[K, V]) addNode(node *LRUCacheNode[K, V]) {
+func (this *LRUCache[K, V]) addNode(node *lruCacheNode[K, V]) {
 	node.prev = this.head
 	node.next = this.head.next
 	this.head.next.prev = node
@@ -68,7 +68,7 @@ func (this *LRUCache[K, V]) addNode(node *LRUCacheNode[K, V]) {
 }
 
 // removeNode removes an existing node from the linked list.
-func (this *LRUCache[K, V]) removeNode(node *LRUCacheNode[K, V]) {
+func (this *LRUCache[K, V]) removeNode(node *lruCacheNode[K, V]) {
 	prev := node.prev
 	next := node.next
 	prev.next = next
@@ -76,13 +76,13 @@ func (this *LRUCache[K, V]) removeNode(node *LRUCacheNode[K, V]) {
 }
 
 // moveToHead moves a node to the head of the linked list (most recently used).
-func (this *LRUCache[K, V]) moveToHead(node *LRUCacheNode[K, V]) {
+func (this *LRUCache[K, V]) moveToHead(node *lruCacheNode[K, V]) {
 	this.removeNode(node)
 	this.addNode(node)
 }
 
 // popTail removes and returns the least recently used node.
-func (this *LRUCache[K, V]) popTail() *LRUCacheNode[K, V] {
+func (this *LRUCache[K, V]) popTail() *lruCacheNode[K, V] {
 	res := this.tail.prev
 	this.removeNode(res)
 	return res
